@@ -1,0 +1,31 @@
+body {
+    font-family: Consolas;
+}
+
+.undone_token {
+    color: #2a2a2a !important;
+}
+
+.active_token {
+    background-color: rgb(176, 176, 0);
+    color: #333 !important;
+}
+
+.incorrect_token {
+    background-color: rgb(255, 0, 0);
+    color: #333 !important;
+}
+
+.done_token {
+    background-color: rgb(203, 255, 227);
+}
+
+.invisible_enter:before {
+    content : ' ↵'
+}
+
+.invisible_tab:before {
+    content : '▸'
+}
+
+
