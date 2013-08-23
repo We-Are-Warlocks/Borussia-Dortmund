@@ -17,14 +17,15 @@
         })
         <!-- 加载入口模块 -->
         seajs.use("/static/script/main")
+        seajs.use("/static/script/debug")
         seajs.use("/static/script/base", function(base) {
             var padContainer = document.getElementById("typingArea")
             g_pad = new base.tspeedPad(padContainer, "static{{[]}}_path[=os.path.join(os.path.dirname(__file__), \"static\")],")
             g_pad.addlistener('currentEleChange', function(element){
                 console.log(element);
             });
-            seajs.use("/static/script/-ws");
         });
+        seajs.use("/static/script/ws");
     </script>
     <head><title>{{title}}</title></head>
     <body>

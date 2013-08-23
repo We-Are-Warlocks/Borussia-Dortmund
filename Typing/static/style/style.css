@@ -28,4 +28,44 @@ body {
     content : '▸'
 }
 
+#Console-container{
+    background: #808080;
+    position : absolute;
+    width: 700px;
+    right: 50px;
+    top: -230px;
+    height: 300px;
+    border-radius: 6px;
+    box-shadow:1px 10px 10px rgba(0, 0, 0, 0.12),1px -10px -10px rgba(0, 0, 0, 0.12);
+}
+
+#Console-text-Wrapper{
+    position:absolute;
+    background: #2e2e2e;
+    top: 10px;
+    bottom: 10px;
+    left: 15px;
+    right: 15px;
+    overflow-y: auto;
+}
+
+#Console-container.div{
+    font-family: consolas;
+}
+#Console-text-container{
+    position:absolute;
+    background: #2e2e2e;
+    bottom: 10px;
+    left: 15px;
+    right: 15px;
+}
+.Console-info{
+    color: greenyellow;
+}
+.Console-warning{
+    color: yellow;
+}
+.Console-error{
+    color: red;
+}
 
