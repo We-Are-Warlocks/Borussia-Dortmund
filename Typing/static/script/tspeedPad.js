@@ -9,6 +9,24 @@
 define(function(require, exports, module) {
     require('./lib/Events');
     var input_token = require('./input_tokenn')
+    var wsModule = require('./ws');
+
+    if(document.addEventListener)
+    {
+        window.addEventListener('load',initFileItemClickHandler,false);
+    }
+
+    function initFileItemClickHandler(){
+        var fileItemElements = document.getElementsByClassName('file-list-item');
+        for(var i in fileItemElements){
+            var item = fileItemElements[i];
+            item.onclick = onFileItemClick;
+        }
+        function onFileItemClick(e){
+            console.log(e.target.getAttribute("data-path"));
+            wsModule.getFileContent(e.target.getAttribute("data-path"));
+        }
+    }
 
     var padObj = function tspeedPad(container, text) {
         var m_padObj = this;
@@ -134,6 +152,9 @@ define(function(require, exports, module) {
                 _currentCharIndex++;
                 currentTokenElement = typingElementArray[_currentCharIndex];
             }
+            var progressElement = document.getElementById('progress');
+            progressElement.innerText = _currentCharIndex + ' / ' + typingElementArray.length;
+            wsModule.sendUserProgress(_currentCharIndex + ' / ' + typingElementArray.length);
             if( _currentCharIndex == typingElementArray.length ){
                 alert("Done!");
                 return false;
@@ -207,5 +228,5 @@ define(function(require, exports, module) {
         this.listener.listen(key, fn);
     }
 
-    return padObj;
+    window['tspeedpad'] = padObj;
 });

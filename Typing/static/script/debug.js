@@ -36,12 +36,12 @@ define(function(require, exports, module) {
     }
 
     function mouseover(){
-        console.log('debug-mouse-over');
+        //console.log('debug-mouse-over');
         _container.style.top = 0;
     }
 
     function mouseout(){
-        console.log('debug-mouse-out');
+        //console.log('debug-mouse-out');
         _container.style.top = '-230px';
     }
 

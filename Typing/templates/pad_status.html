@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<script>
+    if(window.addEventListener){
+        window.addEventListener('load', init);
+    }
+    var pad = '{{p}}';
+    var name = '{{n}}';
+    function init(e){
+        var goElement = document.getElementById('go-pad');
+        goElement.addEventListener('click', onGoClick);
+    }
+    function postData(){
+        var myForm = document.createElement("form");
+        myForm.method = "post";
+        myForm.action = "/p/"+pad;
+        addInput('pad', pad);
+        addInput('user', name);
+        myForm.submit();
+        function addInput(name, value){
+            var myInput = document.createElement("input");
+            myInput.type = "hidden";
+            myInput.name = name;
+            myInput.value = value;
+            myForm.appendChild(myInput);
+        }
+    }
+    function onGoClick(e){
+        console.log(pad);
+        console.log(name);
+        window.location.href='/p/'+name+'/'+pad;
+    }
+</script>
+<body>
+<h1>Pad:{{ p }}</h1>
+<h2>Name:{{ n }}</h2>
+<div id = "user_list_container" style="z-index:100; background-color:white;">
+    <div>User list</div><br />
+    {% for user in users %}
+    <div>{{ user }}</div>
+    {% end %}
+    <button id='go-pad'>Go</button>
+</div>
+</body>
+</html>
