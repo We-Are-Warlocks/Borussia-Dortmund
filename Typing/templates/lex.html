@@ -7,7 +7,6 @@
     <script type="text/javascript">
         seajs.config({
             base: "/static/script/",
-            debug: true,
             plugins: ['nocache']
         })
         seajs.use("/static/script/lexer/js-highlighter");
@@ -40,6 +39,7 @@ function foo(items, nada) {
     }	// Real Tab.
 }
         </code>
+		<div id='tokenTypeDisplayer' style="text-align:center; position: absolute; right:0px; bottom:0px; width:300px; height:50px; background-color:grey;">
     </div>
 </body>
 </html>

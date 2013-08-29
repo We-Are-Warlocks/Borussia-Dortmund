@@ -1,3 +1,7 @@
+span:hover {
+    background-color:aqua;
+}
+
 span.jskeyword {
  font-weight: bold ;
 }

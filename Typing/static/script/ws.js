@@ -7,7 +7,7 @@
  */
 
 define(function(require, exports, module) {
-    var ws = new WebSocket("ws://59.66.138.69:8000/ws/");
+    var ws = new WebSocket("ws://localhost:8000/ws/");
     var debugModule = require("/static/script/debug")
     var lag = 0;
     var ping_timestamp = 0;
