@@ -9,6 +9,9 @@
 define(function(require, exports, module) {
     var ws = new WebSocket("ws://59.66.138.69:8000/ws/");
     var debugModule = require("/static/script/debug")
+    var lag = 0;
+    var ping_timestamp = 0;
+
     //var base = require('./base')
     ws.onopen = function() {
         var pack = {}
@@ -42,11 +45,13 @@ define(function(require, exports, module) {
         switch(obj.subtype){
             case 'user-progress':
                 var user_list_container = document.getElementById('user_list_container');
-                for(var i in user_list_container.children){
-                    var element = user_list_container.children[i];
-                    var username = element.getAttribute('data-username')
-                    if(username == obj.username ){
-                        element.innerText = username + ':' + obj.content;
+                if( user_list_container ){
+                    for(var i in user_list_container.children){
+                        var element = user_list_container.children[i];
+                        var username = element.getAttribute('data-username')
+                        if(username == obj.username ){
+                            element.innerText = username + ':' + obj.content;
+                        }
                     }
                 }
         }
@@ -56,10 +61,12 @@ define(function(require, exports, module) {
         switch(obj.subtype){
             case 'user-arrive':
                 var user_list_container = document.getElementById('user_list_container');
-                var new_user = document.createElement('div');
-                new_user.setAttribute('data-username', obj.content);
-                new_user.innerText = obj.content;
-                user_list_container.appendChild(new_user);
+                if( user_list_container ){
+                    var new_user = document.createElement('div');
+                    new_user.setAttribute('data-username', obj.content);
+                    new_user.innerText = obj.content;
+                    user_list_container.appendChild(new_user);
+                }
         }
     }
 
@@ -77,6 +84,14 @@ define(function(require, exports, module) {
         pack.type = 'request-file';
         pack.content = path;
         ws.send(JSON.stringify(pack));
+    }
+
+    exports.getLag = function(){
+
+    }
+
+    exports.setLagPackInterval = function(interval){
+
     }
 
     function handleRespondFile(req){

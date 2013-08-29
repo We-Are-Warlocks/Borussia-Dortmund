@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lex</title>
+    <script type="text/javascript" src="/static/script/lib/sea.js"></script>
+    <link href="/static/style/mchighlight-javascript.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript">
+        seajs.config({
+            base: "/static/script/",
+            debug: true,
+            plugins: ['nocache']
+        })
+        seajs.use("/static/script/lexer/js-highlighter");
+        if(window.addEventListener){
+            window.addEventListener('load', init);
+        }
+        function init(e){
+            JsHighlighter.highlight('Code', '');
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <code id='Code' style="font-family: consolas;">
+seajs.config({
+    base: "/static/script/",
+    debug: true,
+    plugins: ['nocache']
+})
+seajs.use("/static/script/lexer/js-highlighter");
+if(window.addEventListener){
+    window.addEventListener('load', init);
+}
+function init(e){
+    JsHighlighter.highlight('Code', '');
+}
+function foo(items, nada) {
+    for (var i=0; i &lt; items.length; i++) {
+        alert(items[i] + "juhu\n");
+    }	// Real Tab.
+}
+        </code>
+    </div>
+</body>
+</html>

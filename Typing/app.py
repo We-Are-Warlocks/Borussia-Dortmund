@@ -95,7 +95,7 @@ class PadHandler(tornado.web.RequestHandler):
                     )
 
 
-class EchoWebSocket(tornado.websocket.WebSocketHandler):
+class WebSocket(tornado.websocket.WebSocketHandler):
 
     pad=''
     user=''
@@ -120,12 +120,21 @@ class EchoWebSocket(tornado.websocket.WebSocketHandler):
         elif(m['type'] == 'pad-message'):
             userm.userManager.broadCastPadMessage(
                 self.pad, self.user, m)
+        elif(m['type'] == 'lag'):
+                r = {}
+                r['type'] = 'lag'
+                r['content'] = ""
+                self.write_message(json.dumps(r))
 
     def on_close(self):
         print "WebSocket closed"
         print self.user+'@'+self.pad+' just gone!'
         userm.userManager.userLeave(self.user, self.pad, )
 
+
+class LanguageHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('lex.html')
 
 if __name__ == '__main__':
     tornado.options.parse_command_line()
@@ -134,8 +143,9 @@ if __name__ == '__main__':
                   (r'/poem', PoemPageHandler),
                   (r'/f', FileReqHandler),
                   (r'/p/(\w+)/(\w+)', PadHandler),
-                  (r'/ws/', EchoWebSocket),
+                  (r'/ws/', WebSocket),
                   (r'/u', userm.UserReqHandler),
+                  (r'/l', LanguageHandler)
                   ],
         template_path=os.path.join(os.path.dirname(__file__), "templates"),
         static_path=os.path.join(os.path.dirname(__file__), "static"),
