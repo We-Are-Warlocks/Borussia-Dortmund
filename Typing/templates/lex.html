@@ -14,8 +14,16 @@
             window.addEventListener('load', init);
         }
         function init(e){
+			var b = document.getElementById( 'start-highlight' ) ;
+			b.addEventListener('click', dohighlight);
             JsHighlighter.highlight('Code', '');
         }
+		function dohighlight(e){
+			console.log('click!');
+			var text = document.getElementById( 'todo' ) ;
+			JsHighlighter.highlight('Code', text.value);
+			return true;
+		}
     </script>
 </head>
 <body>
@@ -26,6 +34,10 @@ seajs.config({
     debug: true,
     plugins: ['nocache']
 })
+/**
+ *
+ * multi line comment
+ */
 seajs.use("/static/script/lexer/js-highlighter");
 if(window.addEventListener){
     window.addEventListener('load', init);
@@ -39,6 +51,30 @@ function foo(items, nada) {
     }	// Real Tab.
 }
         </code>
+		<button id='start-highlight'>Highlight!</button>
+		<textarea id='todo' style='position:absolute; top:0px; right:0px; bottom:50px; width:50%;'>
+seajs.config({
+    base: "/static/script/",
+    debug: true,
+    plugins: ['nocache']
+})
+/**
+ *
+ * multi line comment
+ */
+seajs.use("/static/script/lexer/js-highlighter");
+if(window.addEventListener){
+    window.addEventListener('load', init);
+}
+function init(e){
+    JsHighlighter.highlight('Code', '');
+}
+function foo(items, nada) {
+    for (var i=0; i &lt; items.length; i++) {
+        alert(items[i] + "juhu\n");
+    }	// Real Tab.
+}
+		</textarea>
 		<div id='tokenTypeDisplayer' style="text-align:center; position: absolute; right:0px; bottom:0px; width:300px; height:50px; background-color:grey;">
     </div>
 </body>
