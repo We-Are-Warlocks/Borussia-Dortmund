@@ -123,7 +123,7 @@ class WebSocket(tornado.websocket.WebSocketHandler):
         elif(m['type'] == 'lag'):
                 r = {}
                 r['type'] = 'lag'
-                r['content'] = ""
+                r['content'] = m['content']
                 self.write_message(json.dumps(r))
 
     def on_close(self):

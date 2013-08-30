@@ -77,3 +77,13 @@ body {
     color: #000000;
     background: #b6ffb6;
 }
+
+.lag-value-container{
+    color: white;
+    background: #000000;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    height: 30px;
+    width: 70px;
+}

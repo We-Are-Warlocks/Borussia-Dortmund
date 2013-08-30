@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lex</title>
+    <script type="text/javascript" src="/static/script/lexer/js-highlighter.js"></script>
+    <script type="text/javascript">
+        if(window.addEventListener){
+            window.addEventListener('load', init);
+        }
+        function init(e){
+            Highlighter.highlight('Code', '');
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <pre>
+            <code id='Code' style="font-family: consolas;">
+#include&lt;stdio.h&gt;
+
+int main()
+{
+    printf("%d", 1);
+    return 0;
+}
+            </code>
+        </pre>
+    </div>
+</body>
+</html>

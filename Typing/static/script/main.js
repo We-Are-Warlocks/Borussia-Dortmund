@@ -7,10 +7,11 @@
  */
 define(function(require, exports, module) {
     var debugModule = require("/static/script/debug")
-
+    var wsModule = require("/static/script/ws");
     function init()
     {
         debugModule.appendDebugMessage('Go Go Go! --init-- ', 'info');
+        wsModule.checkWebSocket();
     }
 
     if(document.addEventListener)

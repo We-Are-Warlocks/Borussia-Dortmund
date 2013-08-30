@@ -115,15 +115,6 @@ define(function(require, exports, module) {
         };
         this.initState.lex(input);
         element.innerHTML = buffer;
-		var symbolTypeDisplayer = document.getElementById('tokenTypeDisplayer');
-		var children = element.getElementsByTagName('span');
-		for( var i in children){
-			if(children[i].addEventListener){
-				children[i].addEventListener('mouseover', function(e){
-					symbolTypeDisplayer.innerText = this.className;
-				});
-			}
-		}
     } ;
 
     exports.Highlighter = Highlighter;

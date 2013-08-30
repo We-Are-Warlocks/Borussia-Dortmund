@@ -20,7 +20,7 @@ define(function(require, exports, module) {
         }
         return m;
     }
-    
+
     function RunMethod(input) {
         var longestMatchedRule = null ;
         var longestMatch = null ;
@@ -52,7 +52,7 @@ define(function(require, exports, module) {
             return function(action){
                 rules.push(new Rule(regex,action) )
             }
-        }        
+        }
         state.rules = rules;
         state.run = RunMethod;
         state.continuation = function (input) {

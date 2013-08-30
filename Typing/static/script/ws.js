@@ -7,10 +7,35 @@
  */
 
 define(function(require, exports, module) {
-    var ws = new WebSocket("ws://localhost:8000/ws/");
-    var debugModule = require("/static/script/debug")
+    var ws = new WebSocket("ws://59.66.138.69:8000/ws/");
+    var debugModule = require("/static/script/debug");
+
     var lag = 0;
     var ping_timestamp = 0;
+    var intervalNumber = undefined;
+    var lagArray = {};
+    var lagElement = null;
+
+    function sendLagMessage(){
+        var pack = {}
+        pack.type = 'lag';
+        var timeStamp = new Date().getTime();
+        pack.content = timeStamp;
+        lagArray[timeStamp] = {};
+        lagArray[timeStamp].ping = timeStamp;
+        ws.send(JSON.stringify(pack));
+    }
+
+    function setupLagInterval(){
+        // Create a element to represent the lag information
+        if(document && document.createElement){
+            lagElement = document.createElement('div');
+            lagElement.classList.add('lag-value-container');
+            lagElement.innerHTML = 'UnKnown ms';
+            document.body.appendChild(lagElement);
+            intervalNumber = setInterval(sendLagMessage, 3000);
+        }
+    }
 
     //var base = require('./base')
     ws.onopen = function() {
@@ -20,6 +45,7 @@ define(function(require, exports, module) {
         pack.content.pad = window['pad']
         pack.content.user = window['user']
         ws.send(JSON.stringify(pack));
+        setupLagInterval();
     };
     ws.onmessage = function (evt) {
         //debugModule.appendDebugMessage(evt.data, 'info');
@@ -32,9 +58,18 @@ define(function(require, exports, module) {
             case 'server-message':
                 handleServerMessage(obj);
                 debugModule.appendDebugMessage(obj.content, 'info');
+                break;
             case 'pad-message':
                 handlePadMessage(obj);
                 debugModule.appendDebugMessage('Pad:' + obj.content, 'info');
+                break;
+            case 'lag':
+                var returnTimeStamp = new Date().getTime();
+                var sendTimeStamp = obj.content;
+                lagArray[sendTimeStamp].pong = returnTimeStamp;
+                //console.log('Send: ' + sendTimeStamp + '\t' + 'Return: ' + returnTimeStamp);
+                lagElement.innerHTML = (returnTimeStamp - sendTimeStamp).toString() + ' ms';
+                break;
         }
     };
     ws.onclose = function(evt) {
@@ -92,6 +127,15 @@ define(function(require, exports, module) {
 
     exports.setLagPackInterval = function(interval){
 
+    }
+
+    exports.checkWebSocket = function(){
+        if(ws){
+            debugModule.appendDebugMessage('Websocket works well!', 'info');
+        }
+        else{
+            debugModule.appendDebugMessage('Websocket doesn\'t work..', 'warning');
+        }
     }
 
     function handleRespondFile(req){
