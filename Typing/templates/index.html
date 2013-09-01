@@ -1,11 +1,119 @@
 <!DOCTYPE html>
 <html>
-    <head><title>Index</title></head>
+    <head><title>TSPEED</title>
+        <link href="/static/style/index.css" rel="stylesheet" type="text/css"/>
+        <style>
+
+        </style>
+        <script>
+            var header;
+            function resizeHandler(){
+                var elements = [];
+                function addElement(element, xoffset, yoffset){
+
+                }
+            }
+            if(window.addEventListener){
+                window.addEventListener('load', init);
+                //window.addEventListener('resize', resize);
+                window.addEventListener('keypress', keyup);
+            }
+            function keyup(e){
+                header.handleInput(String.fromCharCode(e.which));
+            }
+            function resize(e){
+                //header.recalcPosition();
+                return true;
+            }
+
+            function initHeader(containerElement, text){
+                var timestamp;
+                var textContainer = containerElement;
+                var displayText = text;
+                var styleString = '';
+                var currentBlinkElement = undefined;
+
+                containerElement.innerHTML = '';
+
+                for(var i in displayText){
+                    var ch = displayText[i];
+                    var spanStr = '<span>' + ch + '</span>';
+                    containerElement.innerHTML += spanStr;
+                }
+                currentBlinkElement = textContainer.firstChild;
+                //calcPosition();
+
+                function intervalHandler(){
+                    var currentGreyScale = 0xffffff;
+                    var initGreyScale = 0xffffff;
+                    var targetGreyScale = 0x888888;
+                    var gap = 0x111111;
+                    var direction = 1;
+                    function actualHandler(){
+                        currentBlinkElement.style.backgroundColor = '#' + currentGreyScale.toString(16);
+                        currentGreyScale -= direction * gap;
+                        if(currentGreyScale<targetGreyScale){
+                            direction *= -1;
+                        }
+                        else if(currentGreyScale>initGreyScale){
+                            direction *= -1;
+                        }
+                    }
+                    return actualHandler;
+                }
+
+                function calcPosition(){
+                    var h =  window.innerHeight;
+                    var w =  window.innerWidth;
+                    var headerElement = textContainer;
+                    headerElement.style.top = (h / 2).toString() + 'px';
+                    headerElement.style.left = (w / 2).toString() + 'px';
+                }
+
+                var intervalNumber = setInterval(intervalHandler(), 50);
+
+                function stopInterval(){
+                    clearInterval(intervalNumber);
+                }
+
+                function success(){
+                    for(var i = 0; i < textContainer.children.length; i++){
+                        var element = textContainer.children[i];
+                        element.style.backgroundColor = 'greenyellow';
+                    }
+                }
+
+                function handleInput(inputChar){
+                    console.log(inputChar + currentBlinkElement.innerText);
+                    if(currentBlinkElement && inputChar == currentBlinkElement.innerText){
+                        currentBlinkElement.style.backgroundColor = '#ffffff';
+                        currentBlinkElement = currentBlinkElement.nextSibling;
+                        if(!currentBlinkElement){
+                            stopInterval();
+                            success();
+                        }
+                    }
+                }
+
+                return {
+                    recalcPosition: calcPosition,
+                    stopInterval: stopInterval,
+                    handleInput: handleInput
+                }
+            }
+
+            function init(){
+                header = initHeader(document.getElementById('Header'), 'TSsPpeed');
+            }
+        </script>
+    </head>
     <body>
-        <form method='post' action='/u'>
-            <div style="width: 200px;">Name:</div><input type='text' id='name' name='user'/><br/>
-            <div style="width: 200px;">Pad:</div><input type='text' id='pad_id' name='pad'/><br/>
-            <input type='submit' value="Go"/>
-        </form>
+        <div id = 'main-container' style='position:absolute; top:0px; bottom: 0px; left: 0px; right: 0px;'>
+            <div id = 'Header' style='position: absolute;'></div>
+            <div id = 'SearchArea'>
+                <input id = 'SearchInput' type="text" placeholder="Input a name">
+                <button id = 'SearchGo' value="Go">Go!</button>
+            </div>
+        </div>
     </body>
 </html>

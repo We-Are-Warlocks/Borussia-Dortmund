@@ -14,6 +14,7 @@ define(function(require, exports, module) {
     var ping_timestamp = 0;
     var intervalNumber = undefined;
     var lagArray = {};
+    var currentLag = 0;
     var lagElement = null;
 
     function sendLagMessage(){
@@ -68,7 +69,8 @@ define(function(require, exports, module) {
                 var sendTimeStamp = obj.content;
                 lagArray[sendTimeStamp].pong = returnTimeStamp;
                 //console.log('Send: ' + sendTimeStamp + '\t' + 'Return: ' + returnTimeStamp);
-                lagElement.innerHTML = (returnTimeStamp - sendTimeStamp).toString() + ' ms';
+                currentLag = (returnTimeStamp - sendTimeStamp)/2.0;
+                lagElement.innerHTML = (currentLag).toString() + ' ms';
                 break;
         }
     };
@@ -122,7 +124,7 @@ define(function(require, exports, module) {
     }
 
     exports.getLag = function(){
-
+        return currentLag;
     }
 
     exports.setLagPackInterval = function(interval){
