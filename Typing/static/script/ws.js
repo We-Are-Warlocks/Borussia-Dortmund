@@ -11,6 +11,9 @@ define(function(require, exports, module) {
     //var address = '59.66.138.69:8000'
     var ws = new WebSocket("ws://"+address+"/ws/");
     var debugModule = require("/static/script/debug");
+    var prepareModule = require("/static/script/tspeedPad/prepare");
+
+    prepareModule.init(document.getElementById('prepare-userlist'));
 
     var lag = 0;
     var ping_timestamp = 0;
@@ -41,7 +44,6 @@ define(function(require, exports, module) {
         }
     }
 
-    //var base = require('./base')
     ws.onopen = function() {
         var pack = {}
         pack.type = 'incoming-user';
@@ -52,8 +54,6 @@ define(function(require, exports, module) {
         setupLagInterval();
     };
     ws.onmessage = function (evt) {
-        //debugModule.appendDebugMessage(evt.data, 'info');
-        //console.log(evt);
         var obj = JSON.parse(evt.data);
         switch (obj.type){
             case 'response-file':
@@ -71,7 +71,6 @@ define(function(require, exports, module) {
                 var returnTimeStamp = new Date().getTime();
                 var sendTimeStamp = obj.content;
                 lagArray[sendTimeStamp].pong = returnTimeStamp;
-                //console.log('Send: ' + sendTimeStamp + '\t' + 'Return: ' + returnTimeStamp);
                 currentLag = (returnTimeStamp - sendTimeStamp)/2.0;
                 lagElement.innerHTML = (currentLag).toString() + ' ms';
                 break;
@@ -100,6 +99,7 @@ define(function(require, exports, module) {
     function handleServerMessage(obj){
         switch(obj.subtype){
             case 'user-arrive':
+                //prepareModule.userCome(obj.content);
                 var user_list_container = document.getElementById('user_list_container');
                 if( user_list_container ){
                     var new_user = document.createElement('div');
@@ -107,6 +107,10 @@ define(function(require, exports, module) {
                     new_user.innerText = obj.content;
                     user_list_container.appendChild(new_user);
                 }
+                break;
+            case 'user-status-update':
+                console.log(obj.content);
+                prepareModule.updateUserlist(obj.content);
         }
     }
 

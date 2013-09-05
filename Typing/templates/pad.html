@@ -4,7 +4,7 @@
     <script type="text/javascript" src="/static/script/rainbow.js"></script>
     <script type="text/javascript" src="/static/script/language/generic.js"></script>
     <script type="text/javascript" src="/static/script/language/python.js"></script>
-    <link href="/static/style/style.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/style/pad.css" rel="stylesheet" type="text/css"/>
     <link href="/static/style/themes/github.css" rel="stylesheet" type="text/css">
     <script type="text/javascript">
         var g_pad;
@@ -21,6 +21,7 @@
         <!-- 加载入口模块 -->
         seajs.use("/static/script/main")
         seajs.use("/static/script/debug")
+        seajs.use("/static/script/tspeedPad/prepare");
         seajs.use("/static/script/base", function(base) {
             var padContainer = document.getElementById("typingArea");
             g_pad = new tspeedpad(padContainer, "static{{[]}}_path[=os.path.join(os.path.dirname(__file__), \"static\")],");
@@ -60,6 +61,8 @@
                         {{ escape(f['name']) }}
                     </div>
                     {% end %}
+                </div>
+                <div id='prepare-userlist'>
                 </div>
             </div>
         </div>

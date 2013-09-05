@@ -20,11 +20,21 @@ class UsersManager(object):
         userlist = self.pads[pad].keys()
         return userlist
 
+    def updateUsersStatus(self, pad, username, ws):        
+        userlist = self.getUserList(pad)
+        r = {}
+        r['type'] = 'server-message'
+        r['subtype'] = 'user-status-update'
+        r['content'] = userlist
+        listString = json.dumps(r)
+        print userlist
+        self.broadCastPadMessage(pad, username, listString)
+        return listString
+
+
     def broadCastPadMessage(self, pad, username, message):
         if(not pad in self.pads):
             print 'Error occur, pad %s not exist!' % pad
-        elif (not username in self.pads[pad]):
-            print 'Error occur, user %s in pad %s not exist!' % (username, pad)
         else:
             for u in self.pads[pad].keys():
                 if(not u == username):
@@ -41,7 +51,8 @@ class UsersManager(object):
         userobj['name'] = username
         userobj['pad'] = pad
         userobj['ws'] = ws
-        self.pads[pad][username] = userobj
+        self.pads[pad][username] = userobj        
+        ws.write_message(self.updateUsersStatus(pad, username, ws))
         for u in self.pads[pad].keys():
             if(not u == username):
                 r = {}
@@ -60,7 +71,9 @@ class UsersManager(object):
             for u in self.pads[pad].keys():
                 r = {}
                 r['type'] = 'server-message'
+                r['subtype'] = 'user-leave'
                 r['content'] = username + ' leave the pad!'
+                self.updateUsersStatus(pad, username, None)
                 self.pads[pad][u]['ws'].write_message(json.dumps(r))
 
 
