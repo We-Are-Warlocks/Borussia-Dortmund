@@ -104,13 +104,13 @@ define(function(require, exports, module) {
                 }
             }
             // split tokens to single elements
-            for (var token in _text){
-                var tokenElement = document.createElement("span");
-                tokenElement.innerHTML = _text[token];
-                var token_obj = new input_token(_text[token], tokenElement);
-                typingElementArray.push(token_obj);
-                _container.appendChild(tokenElement);
-            }
+//            for (var token in _text){
+//                var tokenElement = document.createElement("span");
+//                tokenElement.innerHTML = _text[token];
+//                var token_obj = new input_token(_text[token], tokenElement);
+//                typingElementArray.push(token_obj);
+//                _container.appendChild(tokenElement);
+//            }
             var firstTokenElement = typingElementArray[0];
             firstTokenElement.setActive();
         }

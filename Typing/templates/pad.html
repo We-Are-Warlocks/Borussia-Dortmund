@@ -29,41 +29,72 @@
             });
         });
         seajs.use("/static/script/ws");
+        if(window.addEventListener){
+            window.addEventListener('load', function(e){
+                document.getElementById('btn-begin').addEventListener('click', BeginMatch);
+                document.getElementById('btn-end').addEventListener('click', EndMatch);
+            });
+        }
+
+        function BeginMatch(){
+            var prepareElement = document.getElementById('prepare-stage');
+            prepareElement.classList.add('hide-page');
+            prepareElement.classList.remove('display-page');
+            //var competitionElement = document.getElementById('competition-stage');
+        }
+
+        function EndMatch(){
+            var EndELement = document.getElementById('result-stage');
+            EndELement.classList.remove('hide-page');
+            EndELement.classList.add('display-page');
+            //var competitionElement = document.getElementById('competition-stage');
+        }
     </script>
     <head><title>{{title}}</title></head>
     <body>
-        <div id = "type_speed_meter_container" style="background-color:white; position: absolute; width: 20px; height: 100%; right: 0px; top: 0px; bottom: 0px">
-            <div id = "type_speed_meter" style="background-color:#edff15; width: 100%; height: 100%">
+        <div id='prepare-stage' class='full-page display-page' style='z-index:5;'>
+            <div id='prepare-display' style="z-index: 6;opacity: 1.0;position: absolute;">
+                <div style="background-color:white; position: absolute; height: 100%; left: 0px; width: 200px; top: 0px; bottom: 0px; overflow-y: auto">
+                    {% for f in files %}
+                    <div class='file-list-item' data-path="{{ f['path'] }}">
+                        {{ escape(f['name']) }}
+                    </div>
+                    {% end %}
+                </div>
             </div>
         </div>
-        <div id = "user_list_container" style="z-index:100; background-color:white; position: absolute; width: 200px; right: 50px; top: 50px;">
-            {% for user in users %}
-                <li>{{ escape(user) }}</li>
-            {% end %}
-        </div>
-        <div style="background-color:white; position: absolute; height: 100%; left: 0px; width: 200px; top: 0px; bottom: 0px; overflow-y: auto">
-            {% for f in files %}
-            <div class='file-list-item' data-path="{{ f['path'] }}">
-                {{ escape(f['name']) }}
+        <div id='competition-stage' class='' style='z-index:3;background-color: yellow'>
+            <div id = "type_speed_meter_container" style="background-color:white; position: absolute; width: 20px; height: 100%; right: 0px; top: 0px; bottom: 0px">
+                <div id = "type_speed_meter" style="background-color:#edff15; width: 100%; height: 100%">
+                </div>
             </div>
-            {% end %}
+            <div id = "user_list_container" style="z-index:100; background-color:white; position: absolute; width: 200px; right: 50px; top: 50px;">
+            </div>
+
+            <div style="background-color:white; position: absolute; height: 100%; left: 200px; right: 20px; top: 0px; bottom: 0px; overflow-y: scroll">
+                <pre style="display:none"><code data-language="python" id = "code_area">{% raw code_text %}</code></pre>
+                <pre><div id = "my_code_area"></div></pre>
+                <br />
+                <input type="checkbox" id="bracket">自动括号匹配</input>
+                <span id = "keyUpCode"></span>
+                <br />
+                <span id = "keyDownCode"></span>
+                <br />
+                <span id = "currentChar"></span>
+                <br />
+                <span id = "progress"></span>
+                <br />
+                <pre id = "typingArea"></pre>
+                <br />
+                <div id = "compare" tabindex="100"></div>
+            </div>
         </div>
-        <div style="background-color:white; position: absolute; height: 100%; left: 200px; right: 20px; top: 0px; bottom: 0px; overflow-y: scroll">
-            <pre style="display:none"><code data-language="python" id = "code_area">{% raw code_text %}</code></pre>
-            <pre><div id = "my_code_area"></div></pre>
-            <br />
-            <input type="checkbox" id="bracket">自动括号匹配</input>
-            <span id = "keyUpCode"></span>
-            <br />
-            <span id = "keyDownCode"></span>
-            <br />
-            <span id = "currentChar"></span>
-            <br />
-            <span id = "progress"></span>
-            <br />
-            <pre id = "typingArea"></pre>
-            <br />
-            <div id = "compare" tabindex="100"></div>
+        <div id='result-stage' class='full-page hide-page' style='z-index:5'>
+            <div id='result-display' style="z-index: 6;opacity: 1.0;position: absolute;">
+                I 'm result stage
+            </div>
         </div>
+        <button id='btn-begin' onclick="BeginMatch" style='position: absolute; z-index: 99999; left:0px; bottom:200px;'>Begin</button>
+        <button id='btn-end' onclick="EndMatch" style='position: absolute; z-index: 99999; left:0px; bottom:100px;'>End</button>
     </body>
 </html>

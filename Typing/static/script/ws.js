@@ -32,6 +32,7 @@ define(function(require, exports, module) {
         if(document && document.createElement){
             lagElement = document.createElement('div');
             lagElement.classList.add('lag-value-container');
+            lagElement.style.width = 'auto';
             lagElement.innerHTML = 'UnKnown ms';
             document.body.appendChild(lagElement);
             intervalNumber = setInterval(sendLagMessage, 3000);
@@ -50,7 +51,7 @@ define(function(require, exports, module) {
     };
     ws.onmessage = function (evt) {
         //debugModule.appendDebugMessage(evt.data, 'info');
-        console.log(evt);
+        //console.log(evt);
         var obj = JSON.parse(evt.data);
         switch (obj.type){
             case 'response-file':
@@ -142,8 +143,6 @@ define(function(require, exports, module) {
 
     function handleRespondFile(req){
         var content = req.content;
-        console.log(content);
-        //code_area
         var code_area_element = document.getElementById('code_area');
         var my_code_area_element = document.getElementById('my_code_area');
         my_code_area_element.innerHTML = '';
