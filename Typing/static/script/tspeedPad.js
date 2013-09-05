@@ -7,7 +7,7 @@
  */
 
 define(function(require, exports, module) {
-    require('./lib/Events');
+    require('./lib/Events');    
     var input_token = require('./input_tokenn')
     var wsModule = require('./ws');
 
