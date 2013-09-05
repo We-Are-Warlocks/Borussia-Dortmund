@@ -5,26 +5,14 @@
  * Time: 下午8:47
  * To change this template use File | Settings | File Templates.
  */
-/*
- McHighlight-JavaScript: A syntax-highlighter for JavaScript.
-
- Author: Matthew Might
- Site:   http://matt.might.net/
- http://www.ucombinator.org/
-
- This highlighter makes a "best-effort" attempt at handling JavaScript.
-
- If you sharpen the specification or clean it up, please send me the update.
- */
 
 define(function(require, exports, module) {
-    var Lexer = require('./lexer').Lexer;
+    var Lexer = require('./lexer').Lexer;    
     var CONTINUE = require('./lexer').LexContinue;
     var HighlighterModule = require('./highlighter');
     var Highlighter = HighlighterModule.Highlighter;
     var EscapeHtml = HighlighterModule.EscapeHtml;
-    /* Lexical analysis states. */
-
+    /* Lexical analysis states. */    
     var JAVASCRIPT         = new Lexer.State() ;
     var JAVASCRIPT_1STRING = new Lexer.State() ;
     var JAVASCRIPT_2STRING = new Lexer.State() ;

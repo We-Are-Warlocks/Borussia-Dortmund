@@ -16,7 +16,7 @@
             if(window.addEventListener){
                 window.addEventListener('load', init);
                 //window.addEventListener('resize', resize);
-                window.addEventListener('keypress', keyup);
+                window.addEventListener('keypress', keyup);                
             }
             function keyup(e){
                 header.handleInput(String.fromCharCode(e.which));
@@ -103,15 +103,30 @@
             }
 
             function init(){
-                header = initHeader(document.getElementById('Header'), 'TSsPpeed');
+                header = initHeader(document.getElementById('Header'), 'Tspeed');
+                var goButton = document.getElementById('SearchGo');
+                if(goButton && goButton.addEventListener){
+                    goButton.addEventListener('click', go);
+                }
+            }
+
+            function go(evt){
+                var tspeedPadName = document.getElementById('SearchInput').value;
+                var userName = document.getElementById('Name').value;
+                var element = evt.target;
+                var targetUrl = window.location.href + 'p/' + userName + '/' + tspeedPadName;
+                console.log(targetUrl); 
+                window.location.href=targetUrl;
+                return true;
             }
         </script>
     </head>
     <body>
         <div id = 'main-container' style='position:absolute; top:0px; bottom: 0px; left: 0px; right: 0px;'>
+            <input id = 'Name' type="text" placeholder="Input your user name">
             <div id = 'Header' style='position: absolute;'></div>
             <div id = 'SearchArea'>
-                <input id = 'SearchInput' type="text" placeholder="Input a name">
+                <input id = 'SearchInput' type="text" placeholder="Input a tspeed pad name">
                 <button id = 'SearchGo' value="Go">Go!</button>
             </div>
         </div>

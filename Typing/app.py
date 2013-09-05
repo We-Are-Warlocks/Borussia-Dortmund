@@ -63,20 +63,22 @@ class FileReqHandler(tornado.web.RequestHandler):
         self.render('form.html', roads=noun1, wood=noun2,
                     made=verb, difference=noun3)
 
-useabletype = ['py', 'xml']
+useabletype = ['js']
 
 
 class PadHandler(tornado.web.RequestHandler):
 
     def getFilelist(self):
         filelist = []
-        list_dirs = os.walk(os.path.dirname(__file__))
+        scriptPath = os.path.abspath(sys.argv[0])
+        rootPath = '\\'.join(scriptPath.split('\\')[:-1])        
+        list_dirs = os.walk(rootPath)
         for root, dirs, files in list_dirs:
             for f in files:
                 temp = {}
                 temp['name'] = f
                 temp['path'] = os.path.join(root, f)
-                post = f.split('.')[-1]
+                post = f.split('.')[-1]                
                 if(post in useabletype):
                     filelist.append(temp)
         return filelist

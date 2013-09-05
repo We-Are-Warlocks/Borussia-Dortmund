@@ -11,7 +11,7 @@ define(function(require, exports, module) {
         // Each rule is re-written to match prefixes of the input string.
         this.regex = new RegExp("^(" + regex.source + ")") ;
         if (this.regex.compile) this.regex.compile(this.regex) ;
-        this.action = action ;
+        this.action = action ;        
     }
     Rule.prototype.matches = function(s){
         var m = s.match(this.regex);

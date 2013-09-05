@@ -7,7 +7,9 @@
  */
 
 define(function(require, exports, module) {
-    var ws = new WebSocket("ws://59.66.138.69:8000/ws/");
+    var address = 'localhost:8000';
+    //var address = '59.66.138.69:8000'
+    var ws = new WebSocket("ws://"+address+"/ws/");
     var debugModule = require("/static/script/debug");
 
     var lag = 0;
