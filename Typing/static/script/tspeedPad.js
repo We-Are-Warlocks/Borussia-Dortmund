@@ -23,7 +23,7 @@ define(function(require, exports, module) {
             item.onclick = onFileItemClick;
         }
         function onFileItemClick(e){
-            console.log(e.target.getAttribute("data-path"));
+            //console.log(e.target.getAttribute("data-path"));
             wsModule.getFileContent(e.target.getAttribute("data-path"));
         }
     }

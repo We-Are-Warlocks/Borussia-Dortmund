@@ -7,12 +7,6 @@
         </style>
         <script>
             var header;
-            function resizeHandler(){
-                var elements = [];
-                function addElement(element, xoffset, yoffset){
-
-                }
-            }
             if(window.addEventListener){
                 window.addEventListener('load', init);
                 //window.addEventListener('resize', resize);
@@ -20,10 +14,6 @@
             }
             function keyup(e){
                 header.handleInput(String.fromCharCode(e.which));
-            }
-            function resize(e){
-                //header.recalcPosition();
-                return true;
             }
 
             function initHeader(containerElement, text){
@@ -115,7 +105,6 @@
                 var userName = document.getElementById('Name').value;
                 var element = evt.target;
                 var targetUrl = window.location.href + 'p/' + userName + '/' + tspeedPadName;
-                console.log(targetUrl); 
                 window.location.href=targetUrl;
                 return true;
             }
