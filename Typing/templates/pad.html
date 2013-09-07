@@ -19,8 +19,8 @@
             debug: true
         })
         <!-- 加载入口模块 -->
-        seajs.use("/static/script/main")
-        seajs.use("/static/script/debug")
+        seajs.use("/static/script/main");
+        seajs.use("/static/script/debug");
         seajs.use("/static/script/tspeedPad/prepare");
         seajs.use("/static/script/base", function(base) {
             var padContainer = document.getElementById("typingArea");
@@ -29,7 +29,8 @@
                 console.log(element);
             });
         });
-        seajs.use("/static/script/ws");
+        seajs.use("/static/script/connection/ws");
+        seajs.use("/static/script/connection/lag");
         if(window.addEventListener){
             window.addEventListener('load', function(e){
                 document.getElementById('btn-begin').addEventListener('click', BeginMatch);

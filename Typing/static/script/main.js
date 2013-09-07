@@ -7,7 +7,9 @@
  */
 define(function(require, exports, module) {
     var debugModule = require("/static/script/debug")
-    var wsModule = require("/static/script/ws");
+    var wsModule = require("/static/script/connection/ws");
+    var prepareModule = require("/static/script/stages/prepare");
+
     function init()
     {
         debugModule.appendDebugMessage('Go Go Go! --init-- ', 'info');
@@ -17,5 +19,6 @@ define(function(require, exports, module) {
     if(document.addEventListener)
     {
         window.addEventListener('load',init,false);
+        prepareModule.init(document.getElementById('prepare-userlist'));
     }
 });

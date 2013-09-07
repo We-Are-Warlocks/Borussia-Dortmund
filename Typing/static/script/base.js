@@ -13,5 +13,5 @@ define(function(require, exports, module) {
     // create a pad model
     // container : the dom div to contain the pad
     // text : the text to display
-    exports.tspeedPad = require("/static/script/tspeedPad");
+    exports.tspeedPad = require("/static/script/tspeedPad/tspeedPad");
 });
