@@ -5,77 +5,102 @@ import tornado.options
 import tornado.web
 import tornado.websocket
 import json
+import competiton
 
+def buildPackage(t, content):
+    return json.dumps({
+        'type':t,
+        'content':content    
+    })
 
-class UsersManager(object):
-    users = {}
-    pads = {}
+class manager(object):    
+    pads = {}    
 
     def __init__(self):
+        self.messagemapper = {
+            'prepare': self.prepareMessageHandler,
+            'lag': self.lagMessageHandler
+        }
+
+    def usercome(self, padname, username, ws):
+        if(not self.pads.has_key(padname)):
+            padobj = Pad(padname)
+            self.pads[padname] = padobj
+        self.pads[padname].adduser(username, ws)
+
+    def messagemap(self, padname, username, m, ws):
+        funckey = m['type']
+        if(not self.messagemapper.has_key(funckey) ):
+            print '=== api error ==='
+        self.messagemapper[funckey](padname, username, m['content'], ws)
+
+    def prepareMessageHandler(self, padname, username, m, ws):
+        print 'prepare input: %s' % str(m)
+        if(m['subtype']=='update-me'):
+            self.pads[padname].getuser(username).updatestatus(m['subcontent'])
         pass
+        
+    def lagMessageHandler(self, padname, username, m, ws):
+        # 立刻回发消息                
+        ws.write_message(buildPackage('lag', m))
+        
+    def userleave(self, padname, username):
+        pass
+            
 
-    def getUserList(self, pad):
-        if(not pad in self.pads):
-            self.pads[pad] = {}
-        userlist = self.pads[pad].keys()
-        return userlist
+class Pad(object):
+    users = {}
 
-    def updateUsersStatus(self, pad, username, ws):        
-        userlist = self.getUserList(pad)
-        r = {}
-        r['type'] = 'server-message'
-        r['subtype'] = 'user-status-update'
-        r['content'] = userlist
-        listString = json.dumps(r)
-        print userlist
-        self.broadCastPadMessage(pad, username, listString)
-        return listString
+    def __init__(self, name):
+        self.name = name
+        
+    def userlist(self):
+        for k in self.users.keys():
+            pass
 
+    def getuser(self, username):
+        return self.users[username]
 
-    def broadCastPadMessage(self, pad, username, message):
-        if(not pad in self.pads):
-            print 'Error occur, pad %s not exist!' % pad
-        else:
-            for u in self.pads[pad].keys():
-                if(not u == username):
-                    self.pads[pad][u]['ws'].write_message(message)
+    def adduser(self, username, ws):
+        nu = User(username, ws, self)        
+        self.users[username] = nu
+        c = {}
+        c['subtype'] = 'init-userlist'
+        c['subcontent'] = [ {'name':u[0], 'status':u[1].getstatus()} 
+            for u in self.users.items()]        
+        nu.send(buildPackage('prepare', c))
 
-    def userArrived(self, username, pad, ws):
-        if(not pad in self.pads):
-            self.pads[pad] = {}
-        r = {}
-        r['type'] = 'server-message'
-        r['content'] = 'Welcome here, hero ' + username
-        ws.write_message(json.dumps(r))
-        userobj = {}
-        userobj['name'] = username
-        userobj['pad'] = pad
-        userobj['ws'] = ws
-        self.pads[pad][username] = userobj        
-        ws.write_message(self.updateUsersStatus(pad, username, ws))
-        for u in self.pads[pad].keys():
-            if(not u == username):
-                r = {}
-                r['type'] = 'server-message'
-                r['subtype'] = 'user-arrive'
-                r['content'] = username
-                self.pads[pad][u]['ws'].write_message(json.dumps(r))
+    def broadcast(self, exc, message):
+        for k in self.users.keys():
+            if(not k in exc):
+                self.users[k].send(message)
 
-    def userLeave(self, username, pad):
-        if(not pad in self.pads):
-            print 'Error occur, pad %s not exist!' % pad
-        elif (not username in self.pads[pad]):
-            print 'Error occur, user %s in pad %s not exist!' % (username, pad)
-        else:
-            del self.pads[pad][username]
-            for u in self.pads[pad].keys():
-                r = {}
-                r['type'] = 'server-message'
-                r['subtype'] = 'user-leave'
-                r['content'] = username + ' leave the pad!'
-                self.updateUsersStatus(pad, username, None)
-                self.pads[pad][u]['ws'].write_message(json.dumps(r))
+class User(object):
+    name = ''
+    ws = None
+    status = {}
 
+    def __init__(self, name, ws, pad):
+        self.name = name
+        self.ws = ws
+        self.pad = pad
+
+    def getstatus(self):
+        return self.status
+
+    def updatestatus(self, status):
+        self.status = status
+        print 'user: %s, status: %s' % (self.name, str(self.status))
+        self.pad.broadcast([self.name], json.dumps({
+                'type': 'user-update',
+                'content': {
+                    'name': self.name,
+                    'status': self.status
+                }
+            }))
+
+    def send(self, message):
+        self.ws.write_message(message)
 
 class UserReqHandler(tornado.web.RequestHandler):
     def post(self):
@@ -83,4 +108,4 @@ class UserReqHandler(tornado.web.RequestHandler):
         padname = self.get_argument('pad')
         self.render('pad_status.html', users=[], n=username, p=padname)
 
-userManager = UsersManager()
+manager = manager()

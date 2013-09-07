@@ -21,7 +21,7 @@
         <!-- 加载入口模块 -->
         seajs.use("/static/script/main");
         seajs.use("/static/script/debug");
-        seajs.use("/static/script/tspeedPad/prepare");
+        seajs.use("/static/script/stages/prepare");
         seajs.use("/static/script/base", function(base) {
             var padContainer = document.getElementById("typingArea");
             g_pad = new tspeedpad(padContainer, "static{{[]}}_path[=os.path.join(os.path.dirname(__file__), \"static\")],");
@@ -56,7 +56,7 @@
     <body>
         <div id='prepare-stage' class='full-page display-page' style='z-index:5;'>
             <div id='prepare-display' style="z-index: 6;opacity: 1.0;position: absolute;">
-                <div style="background-color:white; position: absolute; height: 100%; left: 0px; width: 200px; top: 0px; bottom: 0px; overflow-y: auto">
+                <div style="background-color:white; height: 50%; overflow-y: auto">
                     {% for f in files %}
                     <div class='file-list-item' data-path="{{ f['path'] }}">
                         {{ escape(f['name']) }}
@@ -65,6 +65,8 @@
                 </div>
                 <div id='prepare-userlist'>
                 </div>
+                <button id='prepared'>准备</button>
+                <input type='text' placeholder="输入字符数量">
             </div>
         </div>
         <div id='competition-stage' class='' style='z-index:3;background-color: yellow'>
@@ -80,17 +82,6 @@
                 <pre><div id = "my_code_area"></div></pre>
                 <br />
                 <input type="checkbox" id="bracket">自动括号匹配</input>
-                <span id = "keyUpCode"></span>
-                <br />
-                <span id = "keyDownCode"></span>
-                <br />
-                <span id = "currentChar"></span>
-                <br />
-                <span id = "progress"></span>
-                <br />
-                <pre id = "typingArea"></pre>
-                <br />
-                <div id = "compare" tabindex="100"></div>
             </div>
         </div>
         <div id='result-stage' class='full-page hide-page' style='z-index:5'>

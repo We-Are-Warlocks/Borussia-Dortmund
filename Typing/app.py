@@ -92,7 +92,7 @@ class PadHandler(tornado.web.RequestHandler):
     def get(self, _user, _pad):
         self.render('pad.html',
                     title=_pad, code_text=code[:300],
-                    users=userm.userManager.getUserList(_pad), __user=_user,
+                    users=None, __user=_user,
                     __pad=_pad, files=self.getFilelist(),
                     )
 
@@ -106,32 +106,20 @@ class WebSocket(tornado.websocket.WebSocketHandler):
         print "WebSocket opened"
 
     def on_message(self, message):
-        m = json.loads(message)
-        if(m['type'] == 'request-file'):
-            with open(m['content']) as fo:
-                string = fo.read()
-                r = {}
-                r['type'] = 'response-file'
-                r['content'] = string[:300]
-                self.write_message(json.dumps(r))
-        elif(m['type'] == 'incoming-user'):
-            self.pad = m['content']['pad']
-            self.user = m['content']['user']
-            print self.user+'@'+self.pad+' just arrived!'
-            userm.userManager.userArrived(self.user, self.pad, self)
-        elif(m['type'] == 'pad-message'):
-            userm.userManager.broadCastPadMessage(
-                self.pad, self.user, m)
-        elif(m['type'] == 'lag'):
-                r = {}
-                r['type'] = 'lag'
-                r['content'] = m['content']
-                self.write_message(json.dumps(r))
-
+        m = json.loads(message)        
+        if(m['type'] == 'ws-init'):
+            #basic user information
+            padname = m['content']['pad'];
+            username = m['content']['user'];
+            self.pad = padname
+            self.username = username
+            userm.manager.usercome(padname, username, self)
+        else:
+            userm.manager.messagemap(self.pad, self.username, m, self)
     def on_close(self):
         print "WebSocket closed"
         print self.user+'@'+self.pad+' just gone!'
-        userm.userManager.userLeave(self.user, self.pad, )
+        userm.manager.userleave(self.pad, self.user)
 
 
 class LanguageHandler(tornado.web.RequestHandler):

@@ -2,11 +2,14 @@
 define(function(require, exports, module) {
 
     var ws = require('./ws');
+    require('/static/script/lib/Events');
     var lag = 0;
     var intervalNumber = undefined;
     var lagArray = {};
     var currentLag = 0;
     var lagElement = null;
+
+    var event = Events();
 
     function sendLagMessage(){
         var pack = {}
@@ -34,10 +37,12 @@ define(function(require, exports, module) {
             var returnTimeStamp = new Date().getTime();
             var sendTimeStamp = obj.content;
             lagArray[sendTimeStamp].pong = returnTimeStamp;
-            currentLag = (returnTimeStamp - sendTimeStamp)/2.0;
+            currentLag = returnTimeStamp;//(returnTimeStamp - sendTimeStamp)/2.0;
             lagElement.innerHTML = (currentLag).toString() + ' ms';
+            event.trigger('lagUpdate', currentLag);
         });
     }
 
     setupLagInterval();
+    exports.event = event;
 });
