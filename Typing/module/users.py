@@ -19,7 +19,8 @@ class manager(object):
     def __init__(self):
         self.messagemapper = {
             'prepare': self.prepareMessageHandler,
-            'lag': self.lagMessageHandler
+            'lag': self.lagMessageHandler,
+            'competition': self.undefineMessageHandler
         }
 
     def usercome(self, padname, username, ws):
@@ -44,6 +45,9 @@ class manager(object):
         # 立刻回发消息                
         ws.write_message(buildPackage('lag', m))
         
+	def undefineMessageHandler(self):
+		print 'undefine key'
+		
     def userleave(self, padname, username):
         pass
             
